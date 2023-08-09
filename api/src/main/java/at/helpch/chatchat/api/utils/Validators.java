@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public final class Validators {
 
-    private final static Pattern HOOK_NAME_PATTERN = Pattern.compile("(?<name>\\w+)");
+    private static final Pattern HOOK_NAME_PATTERN = Pattern.compile("(?<name>\\w+)");
 
     private Validators() {
         throw new AssertionError("Util classes are not to be instantiated!");

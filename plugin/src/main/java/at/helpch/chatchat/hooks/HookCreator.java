@@ -4,6 +4,7 @@ import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.ChatChatAPI;
 import at.helpch.chatchat.hooks.dsrv.ChatChatDsrvHook;
 import at.helpch.chatchat.hooks.gp.GriefPreventionSoftMuteHook;
+import at.helpch.chatchat.hooks.simpleclans.ChatChatSimpleClansHook;
 import at.helpch.chatchat.hooks.towny.ChatChatTownyHook;
 import at.helpch.chatchat.hooks.vanish.EssentialsVanishHook;
 import at.helpch.chatchat.hooks.vanish.SuperVanishHook;
@@ -24,6 +25,10 @@ final class HookCreator {
 
     public @NotNull ChatChatTownyHook chatChatTownyHook(@NotNull final ChatChatAPI ignoredApi) {
         return new ChatChatTownyHook(plugin);
+    }
+
+    public @NotNull ChatChatSimpleClansHook chatChatSimpleClansTownyHook(@NotNull final ChatChatAPI ignoredApi) {
+        return new ChatChatSimpleClansHook(plugin);
     }
 
     public @NotNull EssentialsVanishHook essentialsVanishHook(@NotNull final ChatChatAPI ignoredApi) {

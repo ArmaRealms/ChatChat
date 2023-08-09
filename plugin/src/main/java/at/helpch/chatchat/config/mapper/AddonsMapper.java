@@ -15,6 +15,7 @@ public class AddonsMapper implements TypeSerializer<AddonsHolder> {
     private static final Object[] DELUXECHAT_UNICODE_PERMISSION_PRIVATE_CHAT = new Object[] {"deluxechat", "unicode_permission", "private_chat"};
 
     private static final Object[] TOWNY_CHANNELS = new Object[] {"towny", "channels"};
+    private static final Object[] SIMPLECLANS_CHANNELS = new Object[] {"simpleclans", "channels"};
 
     private static final Object[] DISCORDSRV_CHANNELS_BRIDGING = new Object[] {"discordsrv", "channels_bridging"};
 
@@ -33,6 +34,8 @@ public class AddonsMapper implements TypeSerializer<AddonsHolder> {
         holder.deluxeChatUnicodePermissionPrivateChat(node.node(DELUXECHAT_UNICODE_PERMISSION_PRIVATE_CHAT).getBoolean(true));
 
         holder.townyChannels(node.node(TOWNY_CHANNELS).getBoolean(false));
+
+        holder.simpleClansChannels(node.node(SIMPLECLANS_CHANNELS).getBoolean(false));
 
         holder.discordSrvChannelsBridging(node.node(DISCORDSRV_CHANNELS_BRIDGING).getBoolean(false));
 
@@ -56,6 +59,8 @@ public class AddonsMapper implements TypeSerializer<AddonsHolder> {
         target.node(DELUXECHAT_UNICODE_PERMISSION_PRIVATE_CHAT).set(obj.deluxeChatUnicodePermissionPrivateChat());
 
         target.node(TOWNY_CHANNELS).set(obj.townyChannels());
+
+        target.node(SIMPLECLANS_CHANNELS).set(obj.simpleClansChannels());
 
         target.node(DISCORDSRV_CHANNELS_BRIDGING).set(obj.discordSrvChannelsBridging());
 
