@@ -1,12 +1,14 @@
 package at.helpch.chatchat.hooks.simpleclans;
 
 import at.helpch.chatchat.api.holder.FormatsHolder;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.ResidentList;
+import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public final class SimpleClansClanChannel extends AbstractSimpleClansChannel {
 
@@ -19,8 +21,10 @@ public final class SimpleClansClanChannel extends AbstractSimpleClansChannel {
         super(name, messagePrefix, toggleCommands, channelPrefix, formats, radius);
     }
 
+    @Contract("_ -> new")
     @Override
-    protected @Nullable ResidentList residentList(@NotNull final Resident resident) {
-        return resident.getTownOrNull();
+    protected @NotNull Set<ClanPlayer> clanPlayerList(@NotNull final ClanPlayer clanPlayer) {
+        return new HashSet<>(Objects.requireNonNull(clanPlayer.getClan()).getOnlineMembers());
     }
+
 }

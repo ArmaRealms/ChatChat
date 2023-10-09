@@ -27,7 +27,7 @@ final class HookCreator {
         return new ChatChatTownyHook(plugin);
     }
 
-    public @NotNull ChatChatSimpleClansHook chatChatSimpleClansTownyHook(@NotNull final ChatChatAPI ignoredApi) {
+    public @NotNull ChatChatSimpleClansHook chatChatSimpleClansHook(@NotNull final ChatChatAPI ignoredApi) {
         return new ChatChatSimpleClansHook(plugin);
     }
 

@@ -1,12 +1,13 @@
 package at.helpch.chatchat.hooks.simpleclans;
 
 import at.helpch.chatchat.api.holder.FormatsHolder;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.ResidentList;
+import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public final class SimpleClansAllyChannel extends AbstractSimpleClansChannel {
 
@@ -20,7 +21,10 @@ public final class SimpleClansAllyChannel extends AbstractSimpleClansChannel {
     }
 
     @Override
-    protected @Nullable ResidentList residentList(@NotNull final Resident resident) {
-        return resident.getNationOrNull();
+    protected @NotNull Set<ClanPlayer> clanPlayerList(@NotNull final ClanPlayer clanPlayer) {
+        Set<ClanPlayer> clanPlayerSet = new HashSet<>(Objects.requireNonNull(clanPlayer.getClan()).getAllAllyMembers());
+        clanPlayerSet.add(clanPlayer);
+        return clanPlayerSet;
     }
+
 }
