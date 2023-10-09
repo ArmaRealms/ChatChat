@@ -8,8 +8,10 @@ import at.helpch.chatchat.channel.AbstractChannel;
 import at.helpch.chatchat.util.ChannelUtils;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,10 +37,13 @@ public abstract class AbstractSimpleClansChannel extends AbstractChannel {
     }
 
     private @NotNull Optional<ClanPlayer> clanPlayerList(@NotNull final UUID uuid) {
-        var clanManager = SimpleClans.getInstance().getClanManager();
-        return Objects.requireNonNull(clanManager.getClanByPlayerUniqueId(uuid)).getOnlineMembers().stream()
+        return Objects.requireNonNull(getClanManager().getClanByPlayerUniqueId(uuid)).getOnlineMembers().stream()
             .filter(clanPlayer -> clanPlayer.getUniqueId().equals(uuid))
             .findFirst();
+    }
+
+    public ClanManager getClanManager() {
+        return SimpleClans.getInstance().getClanManager();
     }
 
     @Override
@@ -61,6 +66,23 @@ public abstract class AbstractSimpleClansChannel extends AbstractChannel {
             .filter(User::chatEnabled)
             .filter(target -> ChannelUtils.isTargetWithinRadius(source, target, radius()))
             .collect(Collectors.toSet());
+    }
+
+    @Contract(value = "null -> false", pure = true)
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        AbstractSimpleClansChannel that = (AbstractSimpleClansChannel) o;
+
+        return plugin.equals(that.plugin);
+    }
+
+    @Override
+    public int hashCode() {
+        return plugin.hashCode();
     }
 
 }

@@ -11,7 +11,7 @@ import dev.triumphteam.cmd.core.annotation.Default;
 public class IgnoreCommand extends BaseCommand {
 
     private final ChatChatPlugin plugin;
-    private final static String IGNORE_PERMISSION = "chatchat.ignore";
+    private static final String IGNORE_PERMISSION = "chatchat.ignore";
     public static final String IGNORE_BYPASS_PERMISSION = IGNORE_PERMISSION + ".bypass";
 
     public IgnoreCommand(final ChatChatPlugin plugin) {
@@ -36,4 +36,5 @@ public class IgnoreCommand extends BaseCommand {
         sender.sendMessage(plugin.configManager().messages().ignoredPlayer()
             .replaceText(builder -> builder.matchLiteral("<player>").replacement(target.player().getDisplayName())));
     }
+
 }

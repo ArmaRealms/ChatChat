@@ -1,13 +1,14 @@
 package at.helpch.chatchat.hooks.simpleclans;
 
 import at.helpch.chatchat.api.holder.FormatsHolder;
+import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public final class SimpleClansAllyChannel extends AbstractSimpleClansChannel {
 
@@ -22,9 +23,11 @@ public final class SimpleClansAllyChannel extends AbstractSimpleClansChannel {
 
     @Override
     protected @NotNull Set<ClanPlayer> clanPlayerList(@NotNull final ClanPlayer clanPlayer) {
-        Set<ClanPlayer> clanPlayerSet = new HashSet<>(Objects.requireNonNull(clanPlayer.getClan()).getAllAllyMembers());
-        clanPlayerSet.add(clanPlayer);
-        return clanPlayerSet;
+        final Clan clan = clanPlayer.getClan();
+        if (clan == null) return Set.of();
+        Set<ClanPlayer> clanPlayerSet = new HashSet<>(clan.getAllAllyMembers());
+        clanPlayerSet.addAll(clan.getOnlineMembers());
+        return clanPlayerSet.stream().filter(cp -> cp.toPlayer() != null).collect(Collectors.toSet());
     }
 
 }

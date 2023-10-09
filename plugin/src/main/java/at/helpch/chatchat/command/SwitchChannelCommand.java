@@ -2,6 +2,7 @@ package at.helpch.chatchat.command;
 
 import at.helpch.chatchat.ChatChatPlugin;
 import at.helpch.chatchat.api.user.ChatUser;
+import at.helpch.chatchat.hooks.simpleclans.AbstractSimpleClansChannel;
 import at.helpch.chatchat.hooks.towny.AbstractTownyChannel;
 import at.helpch.chatchat.util.MessageProcessor;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -41,6 +42,14 @@ public final class SwitchChannelCommand extends BaseCommand {
                     .map(Resident::getTownOrNull);
             if (town.isEmpty() || town.get().isRuined()) { // the API will still see a player in that town if it is ruined
                 user.sendMessage(plugin.configManager().messages().userNotInTown());
+                return;
+            }
+        }
+
+        if (channel instanceof AbstractSimpleClansChannel simpleClansChannel) {
+            final var clanPlayer = simpleClansChannel.getClanManager().getClanPlayer(user.uuid());
+            if (clanPlayer == null || clanPlayer.getClan() == null) {
+                user.sendMessage(plugin.configManager().messages().userNotInClan());
                 return;
             }
         }
