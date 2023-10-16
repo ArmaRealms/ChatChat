@@ -34,7 +34,8 @@ public class IgnoreCommand extends BaseCommand {
 
         sender.ignoreUser(target);
         sender.sendMessage(plugin.configManager().messages().ignoredPlayer()
-            .replaceText(builder -> builder.matchLiteral("<player>").replacement(target.player().getDisplayName())));
+            .replaceText(builder -> builder.matchLiteral("<player>")
+                .replacement(target.player().getDisplayName())));
     }
 
 }
