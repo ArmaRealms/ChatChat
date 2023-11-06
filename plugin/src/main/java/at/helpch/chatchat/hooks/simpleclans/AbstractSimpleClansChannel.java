@@ -37,7 +37,8 @@ public abstract class AbstractSimpleClansChannel extends AbstractChannel {
     }
 
     private @NotNull Optional<ClanPlayer> clanPlayerList(@NotNull final UUID uuid) {
-        return Objects.requireNonNull(getClanManager().getClanByPlayerUniqueId(uuid)).getOnlineMembers().stream()
+        return Objects.requireNonNull(getClanManager().getClanByPlayerUniqueId(uuid))
+            .getOnlineMembers().stream()
             .filter(clanPlayer -> clanPlayer.getUniqueId().equals(uuid))
             .findFirst();
     }
@@ -48,7 +49,7 @@ public abstract class AbstractSimpleClansChannel extends AbstractChannel {
 
     @Override
     public boolean isUsableBy(@NotNull final ChatUser user) {
-        return super.isUsableBy(user) && clanPlayerList(user.uuid()).isPresent();
+        return super.isUsableBy(user) && this.clanPlayerList(user.uuid()).isPresent();
     }
 
     protected abstract @Nullable Set<ClanPlayer> clanPlayerList(@NotNull final ClanPlayer clanPlayer);
@@ -57,14 +58,13 @@ public abstract class AbstractSimpleClansChannel extends AbstractChannel {
 
     @Override
     public Set<User> targets(final @NotNull User source) {
-        return clanPlayerList(source.uuid())
+        return this.clanPlayerList(source.uuid())
             .map(this::clanPlayerList).stream()
             .filter(Objects::nonNull)
             .flatMap(Set::stream)
             .map(ClanPlayer::getUniqueId)
             .map(plugin.usersHolder()::getUser)
             .filter(User::chatEnabled)
-            .filter(target -> ChannelUtils.isTargetWithinRadius(source, target, radius()))
             .collect(Collectors.toSet());
     }
 
