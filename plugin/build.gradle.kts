@@ -3,11 +3,11 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     id("chatchat.base-conventions")
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     id("me.mattstudios.triumph") version "0.2.8"
 }
 
-version = "${rootProject.version}-${System.getenv("BUILD_NUMBER")}"
+version = "${rootProject.version}"
 
 repositories {
     papi()
