@@ -68,7 +68,7 @@ public final class ChatUserImpl implements ChatUser {
 
     @Override
     public boolean hasPermission(@NotNull final String node) {
-        return player().hasPermission(node);
+        return player().map(value -> value.hasPermission(node)).orElse(false);
     }
 
     @Override
@@ -166,12 +166,8 @@ public final class ChatUserImpl implements ChatUser {
     }
 
     @Override
-    public @NotNull Player player() {
-        Player player = Bukkit.getPlayer(uuid);
-        if (player == null) {
-            throw new IllegalStateException("Player is not online!");
-        }
-        return player; // this will never be null
+    public @NotNull Optional<Player> player() {
+        return Optional.ofNullable(Bukkit.getPlayer(uuid));
     }
 
     @Override
