@@ -5,7 +5,6 @@ import at.helpch.chatchat.api.holder.FormatsHolder;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
 import at.helpch.chatchat.channel.AbstractChannel;
-import at.helpch.chatchat.util.ChannelUtils;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
@@ -60,7 +59,6 @@ public abstract class AbstractSimpleClansChannel extends AbstractChannel {
     public Set<User> targets(final @NotNull User source) {
         return this.clanPlayerList(source.uuid())
             .map(this::clanPlayerList).stream()
-            .filter(Objects::nonNull)
             .flatMap(Set::stream)
             .map(ClanPlayer::getUniqueId)
             .map(plugin.usersHolder()::getUser)
