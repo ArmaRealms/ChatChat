@@ -3,7 +3,6 @@ package at.helpch.chatchat;
 import at.helpch.chatchat.api.ChatChatAPI;
 import at.helpch.chatchat.api.channel.Channel;
 import at.helpch.chatchat.api.format.PriorityFormat;
-import at.helpch.chatchat.api.hook.Hook;
 import at.helpch.chatchat.api.user.ChatUser;
 import at.helpch.chatchat.api.user.User;
 import at.helpch.chatchat.channel.ChannelTypeRegistryImpl;
@@ -21,6 +20,7 @@ import at.helpch.chatchat.command.SwitchChannelCommand;
 import at.helpch.chatchat.command.UnignoreCommand;
 import at.helpch.chatchat.command.WhisperCommand;
 import at.helpch.chatchat.command.WhisperToggleCommand;
+import at.helpch.chatchat.api.hook.Hook;
 import at.helpch.chatchat.config.ConfigManager;
 import at.helpch.chatchat.data.base.Database;
 import at.helpch.chatchat.data.impl.gson.GsonDatabase;
@@ -51,6 +51,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @BukkitMain
@@ -93,8 +94,8 @@ public final class ChatChatPlugin extends JavaPlugin {
         audiences = BukkitAudiences.create(this);
 
         commandManager = BukkitCommandManager.create(this,
-                usersHolder::getUser,
-                new UserSenderValidator(this));
+            usersHolder::getUser,
+            new UserSenderValidator(this));
 
         hookManager.init();
         configManager.reload();
@@ -102,8 +103,8 @@ public final class ChatChatPlugin extends JavaPlugin {
         // bStats
         Metrics metrics = new Metrics(this, 14781);
         metrics.addCustomChart(new SimpleBarChart("channelTypes", () ->
-                configManager().channels().channels().values().stream()
-                        .collect(Collectors.toMap(s -> s.getClass().getName(), s -> 1, Integer::sum)))
+            configManager().channels().channels().values().stream()
+                .collect(Collectors.toMap(s -> s.getClass().getName(), s -> 1, Integer::sum)))
         );
 
         registerSuggestions();
@@ -113,26 +114,26 @@ public final class ChatChatPlugin extends JavaPlugin {
 
         // event listener registration
         List.of(
-                new PlayerListener(this),
-                new ChatListener(this)
+            new PlayerListener(this),
+            new ChatListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
 
         new PlaceholderAPIPlaceholders(this).register();
 
         cacheDuration = configManager().settings().lastMessagedCacheDuration();
         dataSaveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(
-                this,
-                () -> Bukkit.getOnlinePlayers().stream().map(usersHolder::getUser).filter(user -> user instanceof ChatUser)
-                        .forEach(user -> database().saveChatUser((ChatUser) user)),
-                20 * 60 * 5L,
-                20 * 60 * 5L // Run the user save task every 5 minutes.
+            this,
+            () -> Bukkit.getOnlinePlayers().stream().map(usersHolder::getUser).filter(user -> user instanceof ChatUser)
+                .forEach(user -> database().saveChatUser((ChatUser) user)),
+            20 * 60 * 5L,
+            20 * 60 * 5L // Run the user save task every 5 minutes.
         );
 
         final int formats = configManager.formats().formats().size();
         final int channels = configManager.channels().channels().size();
         final int channelFormats = configManager.channels().channels().values().stream()
-                .mapToInt(channel -> channel.formats().formats().size())
-                .sum();
+            .mapToInt(channel -> channel.formats().formats().size())
+            .sum();
 
         getLogger().info("Plugin enabled successfully!");
         getLogger().info(formats + (formats == 1 ? " format" : " formats") + " loaded!");
@@ -207,7 +208,7 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     private void registerArguments() {
         commandManager.registerArgument(PriorityFormat.class, (sender, argument) ->
-                configManager().formats().formats().get(argument));
+            configManager().formats().formats().get(argument));
 
         commandManager.registerArgument(ChatUser.class, (sender, arg) -> {
             final var player = Bukkit.getPlayer(arg);
@@ -220,31 +221,31 @@ public final class ChatChatPlugin extends JavaPlugin {
 
     private void registerSuggestions() {
         commandManager.registerSuggestion(SuggestionKey.of("recipients"), (sender, context) ->
-                usersHolder.users()
-                        .stream()
-                        .filter(ChatUser.class::isInstance)
-                        .map(ChatUser.class::cast)
-                        .filter(sender::canSee)
-                        .map(ChatUser::player)
-                        .map(Player::getName)
-                        .collect(Collectors.toUnmodifiableList())
+            usersHolder.users()
+                .stream()
+                .filter(ChatUser.class::isInstance)
+                .map(ChatUser.class::cast)
+                .filter(sender::canSee)
+                .map(user -> user.player().map(Player::getName).orElse(null))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toUnmodifiableList())
         );
         commandManager.registerSuggestion(SuggestionKey.of("files"), (sender, context) -> DumpUtils.FILES);
         commandManager.registerSuggestion(ChatUser.class, ((sender, context) -> Bukkit.getOnlinePlayers().stream()
-                .map(Player::getName)
-                .collect(Collectors.toList())));
+            .map(Player::getName)
+            .collect(Collectors.toList())));
 
         commandManager.registerSuggestion(PriorityFormat.class, ((sender, context) ->
-                new ArrayList<>(configManager.formats().formats().keySet())
+            new ArrayList<>(configManager.formats().formats().keySet())
         ));
     }
 
     private void registerCommandMessages() {
         commandManager.registerMessage(BukkitMessageKey.NO_PERMISSION, (sender, context) ->
-                sender.sendMessage(configManager.messages().noPermission()));
+            sender.sendMessage(configManager.messages().noPermission()));
 
         commandManager.registerMessage(MessageKey.UNKNOWN_COMMAND, (sender, context) ->
-                sender.sendMessage(configManager.messages().unknownCommand()));
+            sender.sendMessage(configManager.messages().unknownCommand()));
         commandManager.registerMessage(MessageKey.INVALID_ARGUMENT, (sender, context) -> {
             if (context.getArgumentType() == PriorityFormat.class) {
                 sender.sendMessage(configManager.messages().invalidFormat());
@@ -259,38 +260,38 @@ public final class ChatChatPlugin extends JavaPlugin {
             sender.sendMessage(configManager.messages().invalidArgument());
         });
         commandManager.registerMessage(MessageKey.NOT_ENOUGH_ARGUMENTS, (sender, context) ->
-                sender.sendMessage(configManager.messages().invalidUsage()));
+            sender.sendMessage(configManager.messages().invalidUsage()));
         commandManager.registerMessage(MessageKey.TOO_MANY_ARGUMENTS, (sender, context) ->
-                sender.sendMessage(configManager.messages().invalidUsage()));
+            sender.sendMessage(configManager.messages().invalidUsage()));
     }
 
     private void registerCommands() {
         List.of(
-                new MainCommand(),
-                new IgnoreCommand(this),
-                new UnignoreCommand(this),
-                new IgnoreListCommand(this),
-                new ReloadCommand(this),
-                new MentionToggleCommand(this),
-                new FormatTestCommand(this),
-                new DumpCommand(this),
-                new ChatToggleCommand(this)
+            new MainCommand(),
+            new IgnoreCommand(this),
+            new UnignoreCommand(this),
+            new IgnoreListCommand(this),
+            new ReloadCommand(this),
+            new MentionToggleCommand(this),
+            new FormatTestCommand(this),
+            new DumpCommand(this),
+            new ChatToggleCommand(this)
         ).forEach(commandManager::registerCommand);
 
         if (configManager.settings().privateMessagesSettings().enabled()) {
             List.of(
-                    new WhisperCommand(this, false),
-                    new ReplyCommand(this, new WhisperCommand(this, true)),
-                    new WhisperToggleCommand(this),
-                    new SocialSpyCommand(this)
+                new WhisperCommand(this, false),
+                new ReplyCommand(this, new WhisperCommand(this, true)),
+                new WhisperToggleCommand(this),
+                new SocialSpyCommand(this)
             ).forEach(commandManager::registerCommand);
         }
 
         // register channel commands
         configManager.channels().channels().values().stream()
-                .map(Channel::commandNames) // don't register empty command names
-                .filter(s -> !s.isEmpty())
-                .map(commandNames -> new SwitchChannelCommand(this, commandNames.get(0), commandNames.subList(1, commandNames.size())))
-                .forEach(commandManager::registerCommand);
+            .map(Channel::commandNames) // don't register empty command names
+            .filter(s -> !s.isEmpty())
+            .map(commandNames -> new SwitchChannelCommand(this, commandNames.get(0), commandNames.subList(1, commandNames.size())))
+            .forEach(commandManager::registerCommand);
     }
 }
