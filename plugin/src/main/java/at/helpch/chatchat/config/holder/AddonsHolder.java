@@ -14,6 +14,9 @@ public class AddonsHolder {
     // Towny features
     private boolean TOWNY_CHANNELS = false;
 
+    // SimpleClans features
+    private boolean SIMPLECLANS_CHANNELS = false;
+
     // DiscordSRV features
     private boolean DISCORDSRV_CHANNELS_BRIDGING = false;
 
@@ -54,8 +57,16 @@ public class AddonsHolder {
         return TOWNY_CHANNELS;
     }
 
+    public boolean simpleClansChannels() {
+        return SIMPLECLANS_CHANNELS;
+    }
+
     public void townyChannels(final boolean value) {
         TOWNY_CHANNELS = value;
+    }
+
+    public void simpleClansChannels(final boolean value) {
+        SIMPLECLANS_CHANNELS = value;
     }
 
     public boolean discordSrvChannelsBridging() {

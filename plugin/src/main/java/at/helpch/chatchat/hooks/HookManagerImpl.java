@@ -32,6 +32,7 @@ public final class HookManagerImpl implements HookManager {
         constructors.add(hookCreator::vanillaVanishHook);
         constructors.add(hookCreator::createDsrvHook);
         constructors.add(hookCreator::chatChatTownyHook);
+        constructors.add(hookCreator::chatChatSimpleClansHook);
         constructors.add(hookCreator::essentialsVanishHook);
         constructors.add(hookCreator::superVanishHook);
         constructors.add(hookCreator::griefPreventionSoftMuteHook);

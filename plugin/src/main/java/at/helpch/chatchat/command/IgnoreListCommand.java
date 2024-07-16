@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Command("ignorelist")
 public class IgnoreListCommand extends BaseCommand {
     private final ChatChatPlugin plugin;
-    private final static String IGNORELIST_PERMISSION = "chatchat.ignorelist";
+    private static final String IGNORELIST_PERMISSION = "chatchat.ignorelist";
 
     public IgnoreListCommand(final ChatChatPlugin plugin) {
         this.plugin = plugin;

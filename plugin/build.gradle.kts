@@ -16,6 +16,8 @@ repositories {
     maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
     // towny
     maven("https://repo.glaremasters.me/repository/towny/")
+    // simpleclans
+    maven("https://repo.roinujnosde.me/releases/")
     // dsrv + dependencies
     maven("https://m2.dv8tion.net/releases")
     maven("https://nexus.scarsz.me/content/groups/public")
@@ -27,7 +29,7 @@ repositories {
 
 dependencies {
     implementation(projects.chatChatApi)
-
+    //implementation("com.google.guava:guava:32.1.2-jre")
     implementation(libs.triumph.cmds)
     implementation(libs.configurate)
     implementation(libs.bstats)
@@ -35,6 +37,7 @@ dependencies {
     compileOnly(libs.spigot)
     compileOnly(libs.papi)
     compileOnly(libs.towny)
+    compileOnly(libs.simpleclans)
     compileOnly(libs.essentials)
     compileOnly(libs.discordsrv)
     compileOnly(libs.supervanish)
@@ -46,7 +49,7 @@ bukkit {
     description = "DelucksChat 2.0 or smth like that"
     authors = listOf("HelpChat")
     depend = listOf("PlaceholderAPI")
-    softdepend = listOf("Towny", "DiscordSRV", "SuperVanish", "PremiumVanish", "GriefPrevention")
+    softdepend = listOf("Towny", "SimpleClans", "DiscordSRV", "SuperVanish", "PremiumVanish", "GriefPrevention")
     loadbefore = listOf("Essentials")
     apiVersion = "1.13"
     permissions {

@@ -152,11 +152,9 @@ public final class ChatUserImpl implements ChatUser {
 
     @Override
     public boolean canSee(@NotNull final User target) {
-        if (!(target instanceof ChatUser)) {
+        if (!(target instanceof ChatUser chatUser)) {
             return true;
         }
-
-        final var chatUser = (ChatUser) target;
 
         final var plugin = JavaPlugin.getPlugin(ChatChatPlugin.class);
 
@@ -185,10 +183,11 @@ public final class ChatUserImpl implements ChatUser {
     @Override
     public String toString() {
         return "ChatUserImpl{" +
-                "uuid=" + uuid +
-                ", lastMessaged=" + lastMessagedUser().map(ChatUser::uuid) +
-                ", channel=" + channel +
-                ", format=" + format +
-                '}';
+            "uuid=" + uuid +
+            ", lastMessaged=" + lastMessagedUser().map(ChatUser::uuid) +
+            ", channel=" + channel +
+            ", format=" + format +
+            '}';
     }
+
 }
