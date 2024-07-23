@@ -10,9 +10,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class UsersHolderImpl implements UsersHolder {
 
@@ -20,7 +20,8 @@ public final class UsersHolderImpl implements UsersHolder {
 
     private final ChatChatPlugin plugin;
 
-    private @NotNull final Map<UUID, User> users = new HashMap<>();
+    @NotNull
+    private final Map<UUID, User> users = new ConcurrentHashMap<>();
 
     public UsersHolderImpl(@NotNull final ChatChatPlugin plugin) {
         this.plugin = plugin;
@@ -42,11 +43,11 @@ public final class UsersHolderImpl implements UsersHolder {
     public void removeUser(@NotNull final UUID uuid) {
         final var user = users.remove(uuid);
 
-        if (!(user instanceof ChatUser)) {
+        if (!(user instanceof ChatUser chatUser)) {
             return;
         }
 
-        plugin.database().saveChatUser((ChatUser) user);
+        plugin.database().saveChatUser(chatUser);
     }
 
     public void removeUser(@NotNull final Player player) {
