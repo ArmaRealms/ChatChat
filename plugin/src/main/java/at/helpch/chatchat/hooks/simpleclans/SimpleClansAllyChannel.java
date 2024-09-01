@@ -4,11 +4,14 @@ import at.helpch.chatchat.api.holder.FormatsHolder;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Rank;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.NotNull;
 
 public final class SimpleClansAllyChannel extends AbstractSimpleClansChannel {
 
@@ -25,15 +28,10 @@ public final class SimpleClansAllyChannel extends AbstractSimpleClansChannel {
     protected @NotNull Set<ClanPlayer> clanPlayerList(@NotNull final ClanPlayer clanPlayer) {
         final Clan clan = clanPlayer.getClan();
         if (clan == null) return Set.of();
-        Set<ClanPlayer> clanPlayerSet = clan.getAllAllyMembers().stream()
-            .filter(cp -> cp.toPlayer() != null)
-            .filter(cp -> hasAllyRankPermission(clan, cp))
+
+        return Stream.concat(clan.getAllAllyMembers().stream(), clan.getOnlineMembers().stream())
+            .filter(cp ->  cp.toPlayer() != null && hasAllyRankPermission(clan, cp))
             .collect(Collectors.toSet());
-        clanPlayerSet.addAll(clan.getOnlineMembers().stream()
-            .filter(cp -> cp.toPlayer() != null)
-            .filter(cp -> hasAllyRankPermission(clan, cp))
-            .collect(Collectors.toSet()));
-        return clanPlayerSet;
     }
 
     private boolean hasAllyRankPermission(@NotNull final Clan clan, @NotNull final ClanPlayer clanPlayer) {
