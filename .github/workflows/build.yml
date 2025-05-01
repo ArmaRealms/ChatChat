@@ -12,19 +12,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4.1.1
+      - uses: actions/checkout@v4
       - name: Set up JDK 21
-        uses: actions/setup-java@v4.0.0
+        uses: actions/setup-java@v4
         with:
-          java-version: "21"
-          distribution: "temurin"
-          check-latest: true
-          cache: gradle
+          java-version: '21'
+          distribution: 'temurin'
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v3.1.0
         with:
           arguments: shadowJar
       - name: Upload jarfiles
-        uses: actions/upload-artifact@v4.3.1
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
         with:
           path: plugin/build/libs/*.jar
